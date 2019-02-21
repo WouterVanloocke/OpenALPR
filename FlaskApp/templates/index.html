@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Platen</title>
+        <meta http-equiv="refresh" content="15">
+    </head>
+    <body>
+    <div>
+        {% for row in results %}
+              <tr>
+                 <td>{{ row[0] }}</td>
+                 <td>{{ row[1] }}</td>
+                 <td>{{ row[2] }}</td>
+                 <td>{{ row[3] }}</td>
+              </tr>
+              <br>
+        {% endfor %}
+        </div>
+    </body>
+</html>
+
+
+
