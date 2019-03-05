@@ -1,13 +1,17 @@
 .container {
    
-    margin: 10 10 10 10;
-    
-    padding: 25px 50px 75px 100px;
+  margin: 10 10 10 10;
+  
+  padding: 25px 50px 75px 100px;
 }
+
+
 body
 {
     background-color: bisque
 }
+
+
 
 
 ul {
@@ -37,3 +41,19 @@ ul {
   li a:hover {
     background-color: #111;
   }
+
+  table {
+    width: 50%;
+    border-collapse: collapse;
+  }
+
+table, th, td {
+    border: 1px solid gray;
+    
+}
+
+
+
+th {
+    text-align: left;
+}

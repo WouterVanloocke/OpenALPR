@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  
+
   <title>{% block title %}Welcome Home {% endblock %}</title>
+  
 </head>
 
 <body>
   {% block pagecontent %}
-  {% include 'partials/nav-bar.html' %} <!--Add this-->
+  {% include 'partials/nav-bar.html' %} 
   <h1>
     nummerplaat herkenning
   </h1>
-    <p>nummerplaat
-      <!-- {% for plaat in object_list %}
-        {{ plaat.plaat }}
-      {% endfor %} -->
-      {{ plaat }}
-    </p>
   
-  <!-- {% endblock %} -->
+
+
+  
+  
+  {% endblock %} 
 </body>
 </html>

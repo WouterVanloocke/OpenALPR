@@ -8,14 +8,32 @@
 </head>
 <body>
   {% block pagecontent %}
-    <p>
-    We are a group of Django enthusiasts with the following idiosyncrasies:
     
-    <ol>
-        <li>We only eat bananas on Saturdays.</li>
-        <li>We love making playing football on rainy days.</li>
-    </ol>
-    </p>
+    <table >
+      <tr>
+        <th>datum/tijd</th>
+        <th>plaat</th>
+        <th>tijd over</th>
+      </tr>
+        
+        {% for pl in log %}
+        <tr>
+         <td> {{ pl.tijd_in }} </td>
+         
+          {% for i in plaat %}
+         <td>{{ i.nummerplaat }}</td>
+          <td>{{ tijd_over }} </td>
+        {% endfor %}
+       
+        </tr>
+
+        <p>
+        {% endfor %}
+        
+        </p>
+      
+    </table>
+   
     {% include 'partials/nav-bar.html' %} <!--Add this-->
   {% endblock %}
 </body>

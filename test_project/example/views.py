@@ -1,45 +1,64 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
-import pymysql
-from .models import Garage
+
+from .models import Garage, Log, Plaat
 import mysql.connector
 import MySQLdb
 from django.template.loader import render_to_string
-
-
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="plates",
-  passwd="CelineKdG1234+",
-  database="plates"
-)
-
-mycursor = mydb.cursor()
-
+import datetime 
+from django.utils import timezone
 
 
 class HomePageView(TemplateView):
     template_name = "index.html"
-    def get_queryset(self):
-        return Garage.objects.all()
+    
+  
 
 
 def garage_list(request):
-    db = MySQLdb.connect(host='localhost',  port=3306 ,user='plates', db="plates", passwd='CelineKdG1234+')
-    cursor=db.cursor()
-    cursor.execute('SELECT plaat FROM garage')
-    result = cursor.fetchall()
-    plaat =  result[0]
+    plaat = Garage.objects.all()
+    print(plaat)
+    return render(request,'index.html', {'plaat': plaat})
 
-    
-    
-    return render_to_string('index.html', {'plaat', plaat})
-
-    db.close()
 
 
 class AboutPageView(TemplateView):
     template_name = "about.html"
+
+    def get(self, request):
+        logs = Log.objects.all()
+    
+        #plaat_id = Log.objects.values('plaat_id')
+        #plaat = Plaat.objects.raw('SELECT id, nummerplaat FROM plaat WHERE id = %s' , [plaat_id])
+        #plaat = Plaat.objects.filter(plaat_id = plaat_id).values('nummerplaat')
+
+        #print(plaat)
+
+      
+        #nr_plaat = Plaat.objects.filter(id = pl_id)
+
+        #print(plaat_id)
+
+        for e in logs:
+            print(e.plaat_id)
+
+            nr_plaat = Plaat.objects.filter(id = e.plaat_id)
+            global log
+            log = e
+            for i in nr_plaat:
+                print(i.nummerplaat)
+                global nummerplaat
+                nummerplaat = i.nummerplaat
+
+                nu = datetime.datetime.now(timezone.utc)
+
+                over = nu - e.tijd_in
+                print(over)
+
+       
+        return render(request, self.template_name, {'log' : logs, 'plaat' : nr_plaat , 'tijd_over' : over})
+
+  
 
 # Add this view
 class DataPageView(TemplateView):
