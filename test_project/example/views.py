@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 
 from .models import Garage, Log, Plaat
-import mysql.connector
-import MySQLdb
+
+
 from django.template.loader import render_to_string
 import datetime 
 from django.utils import timezone
@@ -11,6 +11,12 @@ from django.utils import timezone
 
 class HomePageView(TemplateView):
     template_name = "index.html"
+
+    def get(self, request):
+        garage = Garage.objects.latest('tijd_her')
+        print(garage.plaat)
+        return render(request, 'index.html', {'garage':garage})
+
     
   
 
@@ -39,22 +45,27 @@ class AboutPageView(TemplateView):
 
         #print(plaat_id)
 
+        over  = [""]
+ 
         for e in logs:
             print(e.plaat_id)
 
             nr_plaat = Plaat.objects.filter(id = e.plaat_id)
             global log
             log = e
-            for i in nr_plaat:
-                print(i.nummerplaat)
-                global nummerplaat
-                nummerplaat = i.nummerplaat
+            nu = datetime.datetime.now(timezone.utc)
+            
+            over[log.tijd_in] = nu - log.tijd_in
+            print(over[e])
 
-                nu = datetime.datetime.now(timezone.utc)
 
-                over = nu - e.tijd_in
-                print(over)
-
+         
+        for i in nr_plaat:
+            print(i.nummerplaat)
+            global nummerplaat
+            nummerplaat = i.nummerplaat
+            
+           
        
         return render(request, self.template_name, {'log' : logs, 'plaat' : nr_plaat , 'tijd_over' : over})
 

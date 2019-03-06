@@ -5,7 +5,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  
+  <script type="text/javascript">
+    setInterval("my_function();",5000); 
+    function my_function(){
+      $('#refresh').load(location.href + ' #time');
+    }
+  </script>
 
   <title>{% block title %}Welcome Home {% endblock %}</title>
   
@@ -17,7 +22,10 @@
   <h1>
     nummerplaat herkenning
   </h1>
-  
+
+  <p class="plaat">
+  {{ garage.plaat }}
+  </p>
 
 
   

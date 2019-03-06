@@ -17,18 +17,20 @@
       </tr>
         
         {% for pl in log %}
+        {% for i in plaat %}
         <tr>
          <td> {{ pl.tijd_in }} </td>
          
-          {% for i in plaat %}
-         <td>{{ i.nummerplaat }}</td>
-          <td>{{ tijd_over }} </td>
+       
+        <td>{{ i.nummerplaat }}</td>
+        <td>{{ tijd_over }}</td>
+        {% endfor %}
         {% endfor %}
        
         </tr>
 
         <p>
-        {% endfor %}
+       
         
         </p>
       
