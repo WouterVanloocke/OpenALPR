@@ -16,16 +16,49 @@
         <th>tijd over</th>
       </tr>
         
-        {% for pl in log %}
-        {% for i in plaat %}
+        <!-- {% for pl in log %}
+      
         <tr>
          <td> {{ pl.tijd_in }} </td>
-         
+       
+     
+        {% for i in plaat %}
        
         <td>{{ i.nummerplaat }}</td>
-        <td>{{ tijd_over }}</td>
         {% endfor %}
+      
+        {% for tijd in over %}
+        <td>{{ tijd }}</td>
+        
         {% endfor %}
+        {% endfor %} -->
+
+        {% for arr in BIG %}
+        <tr>
+          <td>
+            {{ arr.nummerplaat}}
+          </td>
+          
+        </tr>
+        <tr>
+          <td>
+            {{ arr.tijd_in}}
+          </td>
+          
+        </tr>
+        <tr>
+          <td>
+            {{ arr.tijd_over}}
+          </td>
+          
+        </tr>
+
+
+
+        {% endfor %}
+
+        
+     
        
         </tr>
 
@@ -37,6 +70,6 @@
     </table>
    
     {% include 'partials/nav-bar.html' %} <!--Add this-->
-  {% endblock %}
+    {% endblock %}
 </body>
 </html>

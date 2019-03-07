@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 
 from .models import Garage, Log, Plaat
-
+import pickle
 
 from django.template.loader import render_to_string
 import datetime 
@@ -34,41 +34,59 @@ class AboutPageView(TemplateView):
     def get(self, request):
         logs = Log.objects.all()
     
-        #plaat_id = Log.objects.values('plaat_id')
-        #plaat = Plaat.objects.raw('SELECT id, nummerplaat FROM plaat WHERE id = %s' , [plaat_id])
-        #plaat = Plaat.objects.filter(plaat_id = plaat_id).values('nummerplaat')
-
-        #print(plaat)
-
-      
-        #nr_plaat = Plaat.objects.filter(id = pl_id)
-
-        #print(plaat_id)
-
         over  = [""]
+        j = 0
+        
+        myArr = {}
+        BIG = []
+        
  
         for e in logs:
             print(e.plaat_id)
+
+           
+            
 
             nr_plaat = Plaat.objects.filter(id = e.plaat_id)
             global log
             log = e
             nu = datetime.datetime.now(timezone.utc)
-            
-            over[log.tijd_in] = nu - log.tijd_in
-            print(over[e])
+            tijd =  nu - e.tijd_in
+            over.append(tijd)
+            print(j)
+            j = j + 1
 
+            
 
          
-        for i in nr_plaat:
-            print(i.nummerplaat)
-            global nummerplaat
-            nummerplaat = i.nummerplaat
+            for i in nr_plaat:
+                print(i.nummerplaat)
+                global nummerplaat
+                nummerplaat = i.nummerplaat
+            
+            myArr["nummerplaat"] = nummerplaat
+
+            myArr["tijd_in"] = e.tijd_in
+            print(myArr["tijd_in"])
+
+            myArr["tijd_over"] = tijd
+
+            BIG.insert(myArr)
+        
+        for x in BIG:
+            print(x["tijd_in"])
+
+
             
            
        
-        return render(request, self.template_name, {'log' : logs, 'plaat' : nr_plaat , 'tijd_over' : over})
+        return render(request, self.template_name, {'log' : logs, 'plaat' : nr_plaat , 'over' : over, 'teller':j, "BIG" : BIG})
 
+
+class obj(object):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value 
   
 
 # Add this view
