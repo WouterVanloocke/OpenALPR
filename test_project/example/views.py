@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 
-from .models import Garage, Log, Plaat
-import pickle
+from .models import Garage, Log, Plaat, Eigenaar, Medewerkers
+
 
 from django.template.loader import render_to_string
 import datetime 
@@ -15,7 +15,35 @@ class HomePageView(TemplateView):
     def get(self, request):
         garage = Garage.objects.latest('tijd_her')
         print(garage.plaat)
-        return render(request, 'index.html', {'garage':garage})
+        print(garage.plaat_id)
+
+        plaat = Plaat.objects.get(id = garage.plaat_id)
+        print(plaat.eigenaar_id)
+
+        eigenaar = Eigenaar.objects.get(id = plaat.eigenaar_id)
+        print(eigenaar.voornaam)
+
+        toegang = ""
+
+        if plaat.actief == 1:
+            print("actief")
+            toegang = "access"
+            photo = 'access.png'
+        elif plaat.actief == 0:
+            
+            toegang = "no access"
+            photo = 'noaccess.png'
+
+        return render(request, 'index.html', {'garage':garage , 'access':toegang, 'eigenaar' : eigenaar, 'photo' : photo})
+
+    
+    def post(self, request):
+        post = request.POST.get("plaat", "")
+        plaatid = Plaat.objects.get(nummerplaat = post)
+        medewerkers = Medewerkers.objects.filter(id = plaatid.eigenaar_id).values()
+        return render(request, 'data.html', {'medewerkers':medewerkers})
+        
+
 
     
   
@@ -33,74 +61,44 @@ class AboutPageView(TemplateView):
 
     def get(self, request):
         logs = Log.objects.all()
-    
-        over  = [""]
-        j = 0
-        
-        myArr = {}
-        BIG = []
-        
- 
-        for e in logs:
-            print(e.plaat_id)
+        platen = []
+        tijden = []
+        nu = datetime.datetime.now(timezone.utc)
+        #plaat_id = Log.objects.values('plaat_id')
+        #plaat = Plaat.objects.raw('SELECT id, nummerplaat FROM plaat WHERE id = %s' , [plaat_id])
+        #plaat = Plaat.objects.filter(plaat_id = plaat_id).values('nummerplaat')
 
-           
-            
+        #print(plaat)
 
-            nr_plaat = Plaat.objects.filter(id = e.plaat_id)
-            global log
-            log = e
-            nu = datetime.datetime.now(timezone.utc)
-            tijd =  nu - e.tijd_in
-            over.append(tijd)
-            print(j)
-            j = j + 1
+      
+        #nr_plaat = Plaat.objects.filter(id = pl_id)
 
-            
+        #print(plaat_id)
 
-         
-            for i in nr_plaat:
-                print(i.nummerplaat)
-                global nummerplaat
-                nummerplaat = i.nummerplaat
-            
-            myArr["nummerplaat"] = nummerplaat
-
-            myArr["tijd_in"] = e.tijd_in
-            print(myArr["tijd_in"])
-
-            myArr["tijd_over"] = tijd
-
-            BIG.insert(myArr)
-        
-        for x in BIG:
-            print(x["tijd_in"])
+       # for e in logs:
+          #  print(e.plaat_id)
+        for i in logs:
+           nr_plaat = Plaat.objects.get(id = i.plaat_id)
+           over = nu - i.tijd_in
+           tijden.append(over)
+          # print(nr_plaat.nummerplaat)
+           platen.append(nr_plaat.nummerplaat)
+        return render(request, self.template_name, {'combo' : zip(logs,platen,tijden)})
 
 
-            
-           
-       
-        return render(request, self.template_name, {'log' : logs, 'plaat' : nr_plaat , 'over' : over, 'teller':j, "BIG" : BIG})
-
-
-class obj(object):
-    def __init__(self, name, value):
-        self.name = name
-        self.value = value 
-  
 
 # Add this view
 class DataPageView(TemplateView):
     def get(self, request, **kwargs):
+       template_name = "data.html"
 
+    def get(self, request):
+        medewerkers = Medewerkers.objects.all()
+        print(medewerkers)
+        return render(request, 'data.html', {'medewerkers':medewerkers})
 
-        context = {
-            'data': [
-                {
-            
-                }
-            ]
-        }
-        
-
-        return render(request, 'data.html', context)
+    def post(self, request):
+        post = request.POST.get("plaat", "")
+        plaatid = Plaat.objects.get(nummerplaat = post)
+        medewerkers = Medewerkers.objects.filter(id = plaatid.eigenaar_id).values()
+        return render(request, 'data.html', {'medewerkers':medewerkers})

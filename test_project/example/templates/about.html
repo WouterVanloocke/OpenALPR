@@ -8,68 +8,32 @@
 </head>
 <body>
   {% block pagecontent %}
-    
     <table >
       <tr>
-        <th>datum/tijd</th>
-        <th>plaat</th>
-        <th>tijd over</th>
+        <th>Datum/Tijd</th>
+        <th>Plaat</th>
+        <th>Tijd In Garage</th>
+        <th>Eigenaar</th>
       </tr>
         
-        <!-- {% for pl in log %}
-      
+         {% for pl,i,t in combo %}
         <tr>
          <td> {{ pl.tijd_in }} </td>
-       
-     
-        {% for i in plaat %}
-       
-        <td>{{ i.nummerplaat }}</td>
-        {% endfor %}
-      
-        {% for tijd in over %}
-        <td>{{ tijd }}</td>
-        
-        {% endfor %}
-        {% endfor %} -->
-
-        {% for arr in BIG %}
-        <tr>
-          <td>
-            {{ arr.nummerplaat}}
-          </td>
-          
+         <td>{{ i }}</td>
+          <td>{{ t }} </td>
+         <td>
+         <form action="/data/" method="post">
+           {% csrf_token %}
+           <input type="hidden" name="plaat" value="{{ i }}">
+           <input type="submit" value="Meer Informatie" class="btn btn-primary">
+         </form>
+         </td>
+         <!-- <td> <a href="/data">Meer Informatie</a> </td>-->
         </tr>
-        <tr>
-          <td>
-            {{ arr.tijd_in}}
-          </td>
-          
-        </tr>
-        <tr>
-          <td>
-            {{ arr.tijd_over}}
-          </td>
-          
-        </tr>
-
-
-
-        {% endfor %}
-
-        
-     
-       
-        </tr>
-
-        <p>
-       
-        
-        </p>
-      
+         {% endfor %}
     </table>
    
     {% include 'partials/nav-bar.html' %} <!--Add this-->
-    {% endblock %}
+  {% endblock %}
 </body>
 </html>

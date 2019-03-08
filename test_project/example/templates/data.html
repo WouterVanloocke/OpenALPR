@@ -16,15 +16,19 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Celebrity Name</th>
-            <th>Net Worth</th>
+            <th>Voornaam</th>
+            <th>Achternaam</th>
+            <th>Adres</th>
+            <th>Functie</th>
           </tr>
         </thead>
         <tbody>
-          {% for celebrity in data %}
+          {% for mw in medewerkers %}
             <tr>
-              <td>{{ celebrity.name }}</td>
-              <td>$ {{ celebrity.worth | intcomma }}</td>
+              <td>{{ mw.voornaam}}</td>
+              <td>{{ mw.achternaam}}</td>
+              <td>{{ mw.adres}}</td>
+              <td>{{ mw.functie}}</td>
             </tr>
           {% endfor %}
         </tbody>
