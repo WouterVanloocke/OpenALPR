@@ -13,28 +13,36 @@ class HomePageView(TemplateView):
     template_name = "index.html"
 
     def get(self, request):
-        garage = Garage.objects.latest('tijd_her')
-        print(garage.plaat)
-        print(garage.plaat_id)
+        try:
+            garage = Garage.objects.latest('tijd_her')
+        
+            print(garage.plaat)
+            print(garage.plaat_id)
 
-        plaat = Plaat.objects.get(id = garage.plaat_id)
-        print(plaat.eigenaar_id)
+            plaat = Plaat.objects.get(id = garage.plaat_id)
+            print(plaat.eigenaar_id)
 
-        eigenaar = Eigenaar.objects.get(id = plaat.eigenaar_id)
-        print(eigenaar.voornaam)
+            eigenaar = Eigenaar.objects.get(id = plaat.eigenaar_id)
+            print(eigenaar.voornaam)
 
-        toegang = ""
+            toegang = ""
 
-        if plaat.actief == 1:
-            print("actief")
-            toegang = "access"
-            photo = 'access.png'
-        elif plaat.actief == 0:
-            
-            toegang = "no access"
-            photo = 'noaccess.png'
+            if plaat.actief == 1:
+                print("actief")
+                toegang = "access"
+                photo = 'access.png'
+            elif plaat.actief == 0:
+                
+                toegang = "no access"
+                photo = 'noaccess.png'
+            return render(request, 'index.html', {'garage':garage , 'access':toegang, 'eigenaar' : eigenaar, 'photo' : photo})
 
-        return render(request, 'index.html', {'garage':garage , 'access':toegang, 'eigenaar' : eigenaar, 'photo' : photo})
+        except Garage.DoesNotExist:
+            garage = None
+          
+
+
+            return render(request, 'notfound.html', {'garage':garage })
 
     
     def post(self, request):
